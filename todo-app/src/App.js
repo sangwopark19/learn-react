@@ -1,43 +1,25 @@
-import { Component } from 'react';
 import './App.css';
+import LearningComponent from './components/learning-examples/LearningComponent';
 
 function App() {
   return (
     <div className="App">
-      <FirstComponent></FirstComponent>
-      <SecondComponent></SecondComponent>
-      <ThirdComponent></ThirdComponent>
-      <FourthComponent></FourthComponent>
+      <LearningComponent></LearningComponent>
     </div>
   );
 }
 
-function FirstComponent() {
-  return (
-    <div className='FirstComponent'>FirstComponent</div>
-  )
-}
 
-function SecondComponent() {
-  return (
-    <div className='SecondComponent'>SecondComponent</div>
-  )
-}
 
-class ThirdComponent extends Component{
-  render() {
-    return (
-      <div className='ThirdComponent'>ThirdComponent</div>
-    );
-  }
-}
 
-class FourthComponent extends Component{
-  render() {
-    return (
-       <div className='FourthComponent'>FourthComponent</div>
-    );
-  }
-}
+
+// 리액트 16.8 이상부턴 함수컴포넌트도 hooks를 이용해 State를 가질 수 있으니 클래스 컴포넌트를 쓸 이유가 없다.
+// class FourthComponent extends Component {
+//   render() {
+//     return (
+//       <div className='FourthComponent'>FourthComponent</div>
+//     );
+//   }
+// }
 
 export default App;
