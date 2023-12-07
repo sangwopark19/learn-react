@@ -1,11 +1,29 @@
 import { useState } from "react";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  useNavigate,
+  useParams,
+} from "react-router-dom";
 import "./TodoApp.css";
+
 export default function TodoApp() {
   return (
     <div className="TodoApp">
-      Todo Management Application
-      <LoginComponent></LoginComponent>
-      {/* <WelcomeComponent></WelcomeComponent> */}
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<LoginComponent />}></Route>
+          <Route path="/login" element={<LoginComponent />}></Route>
+          <Route
+            path="/welcome/:username"
+            element={<WelcomeComponent />}
+          ></Route>
+          <Route path="*" element={<ErrorComponent />}></Route>
+        </Routes>
+      </BrowserRouter>
+      {/* <LoginComponent></LoginComponent>
+      <WelcomeComponent></WelcomeComponent> */}
     </div>
   );
 }
@@ -15,6 +33,7 @@ function LoginComponent() {
   const [password, setPassword] = useState("");
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [showErrorMessage, setShowErrorMessage] = useState(false);
+  const navigate = useNavigate();
 
   function handleUsernameChange(event) {
     setUsername(event.target.value);
@@ -29,6 +48,7 @@ function LoginComponent() {
       console.log("Success");
       setShowSuccessMessage(true);
       setShowErrorMessage(false);
+      navigate(`/welcome/${username}`);
     } else {
       console.log("Failed");
       setShowSuccessMessage(false);
@@ -56,6 +76,7 @@ function LoginComponent() {
 
   return (
     <div className="Login">
+      <h1>Time to Login!</h1>
       {showSuccessMessage && (
         <div className="successMessage">Authenticate SuccessFully</div>
       )}
@@ -95,6 +116,24 @@ function LoginComponent() {
   );
 }
 
-// function WelcomeComponent() {
-//   return <div className="Welcom">Welcome Component</div>;
-// }
+function WelcomeComponent() {
+  const { username } = useParams();
+
+  return (
+    <div className="Welcom">
+      <h1>환영합니다 {username}님.</h1>
+      <div>Welcome Component</div>
+    </div>
+  );
+}
+
+function ErrorComponent() {
+  return (
+    <div className="ErrorComponent">
+      <h1>복구에 노력 중입니다!</h1>
+      <div>
+        하지만 죄송하게도 404 오류입니다. 문의는 여기로 주세요 010-2222-2222
+      </div>
+    </div>
+  );
+}
