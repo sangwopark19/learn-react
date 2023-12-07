@@ -13,13 +13,11 @@ export default function TodoApp() {
     <div className="TodoApp">
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<LoginComponent />}></Route>
-          <Route path="/login" element={<LoginComponent />}></Route>
-          <Route
-            path="/welcome/:username"
-            element={<WelcomeComponent />}
-          ></Route>
-          <Route path="*" element={<ErrorComponent />}></Route>
+          <Route path="/" element={<LoginComponent />} />
+          <Route path="/login" element={<LoginComponent />} />
+          <Route path="/welcome/:username" element={<WelcomeComponent />} />
+          <Route path="/todos" element={<ListTodosComponent />} />
+          <Route path="*" element={<ErrorComponent />} />
         </Routes>
       </BrowserRouter>
       {/* <LoginComponent></LoginComponent>
@@ -133,6 +131,37 @@ function ErrorComponent() {
       <h1>복구에 노력 중입니다!</h1>
       <div>
         하지만 죄송하게도 404 오류입니다. 문의는 여기로 주세요 010-2222-2222
+      </div>
+    </div>
+  );
+}
+
+function ListTodosComponent() {
+  const todos = [
+    { id: 1, description: "AWS 공부" },
+    { id: 2, description: "풀스택 개발 공부" },
+    { id: 3, description: "DevOps 공부" },
+  ];
+  return (
+    <div className="ListTodosComponent">
+      <h1>할일 목록</h1>
+      <div>
+        <table>
+          <thead>
+            <tr>
+              <td>id</td>
+              <td>description</td>
+            </tr>
+          </thead>
+          <tbody>
+            {todos.map((todo) => (
+              <tr key={todo.id}>
+                <td>{todo.id}</td>
+                <td>{todo.description}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </div>
   );
