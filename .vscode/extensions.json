@@ -1,5 +1,3 @@
 {
-	"recommendations": [
-		"letrieu.expand-region"
-	]
+  "recommendations": ["letrieu.expand-region", "esbenp.prettier-vscode"]
 }
