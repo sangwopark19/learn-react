@@ -1,8 +1,13 @@
 import { useNavigate, useParams } from "react-router-dom";
-import { retrieveTodoApi, updateTodoApi } from "./api/TodoApiService";
+import {
+  createTodoApi,
+  retrieveTodoApi,
+  updateTodoApi,
+} from "./api/TodoApiService";
 import { useAuth } from "./security/AuthContext";
 import { useEffect, useState } from "react";
 import { ErrorMessage, Field, Form, Formik } from "formik";
+import moment from "moment";
 
 function TodoComponent() {
   const { id } = useParams();
@@ -15,12 +20,14 @@ function TodoComponent() {
   useEffect(() => retrieveTodos(), [id]);
 
   function retrieveTodos() {
-    retrieveTodoApi(username, id)
-      .then((response) => {
-        setDescription(response.data.description);
-        setTargetDate(response.data.targetDate);
-      })
-      .catch((error) => console.log(error));
+    if (id == -1) {
+      retrieveTodoApi(username, id)
+        .then((response) => {
+          setDescription(response.data.description);
+          setTargetDate(response.data.targetDate);
+        })
+        .catch((error) => console.log(error));
+    }
   }
 
   function onSubmit(values) {
@@ -34,11 +41,19 @@ function TodoComponent() {
     };
     console.log(todo);
 
-    updateTodoApi(username, id, todo)
-      .then((response) => {
-        navigate("/todos");
-      })
-      .catch((error) => console.log(error));
+    if (id === -1) {
+      createTodoApi(username, todo)
+        .then((response) => {
+          navigate("/todos");
+        })
+        .catch((error) => console.log(error));
+    } else {
+      updateTodoApi(username, id, todo)
+        .then((response) => {
+          navigate("/todos");
+        })
+        .catch((error) => console.log(error));
+    }
   }
 
   function validate(values) {
@@ -48,11 +63,15 @@ function TodoComponent() {
     };
 
     if (values.description.length < 5) {
-      errors.description = "유효한 설명을 입력하십시오";
+      errors.description = "최소한 5글자를 입력하십시오";
     }
 
-    if (values.targetDate == null) {
-      errors.targetDate = "유효한 목표 날짜를 입력하십시오";
+    if (
+      values.targetDate === null ||
+      values.targetDate === "" ||
+      !moment(values.targetDate).isValid()
+    ) {
+      errors.targetDate = "목표날짜를 입력하십시오";
     }
 
     console.log(values);
