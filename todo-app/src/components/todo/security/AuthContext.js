@@ -1,5 +1,6 @@
 import { createContext, useContext, useState } from "react";
 import { executeBasicAuthenticationService } from "../api/HelloWorldApiService";
+import { apiClient } from "../api/ApiClient";
 
 // 1: 컨텍스트 생성
 export const AuthContext = createContext();
@@ -37,6 +38,12 @@ export default function AuthProvider({ children }) {
         setIsAuthenticated(true);
         setUsername(username);
         setToken(baToken);
+
+        apiClient.interceptors.request.use((config) => {
+          console.log("인터셉트하고 토큰을 추가");
+          config.headers.Authorization = baToken;
+          return config;
+        });
         return true;
       } else {
         logout();

@@ -20,7 +20,7 @@ function TodoComponent() {
   useEffect(() => retrieveTodos(), [id]);
 
   function retrieveTodos() {
-    if (id == -1) {
+    if (id !== -1) {
       retrieveTodoApi(username, id)
         .then((response) => {
           setDescription(response.data.description);
@@ -41,7 +41,7 @@ function TodoComponent() {
     };
     console.log(todo);
 
-    if (id === -1) {
+    if (id == -1) {
       createTodoApi(username, todo)
         .then((response) => {
           navigate("/todos");
