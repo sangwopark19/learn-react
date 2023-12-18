@@ -13,6 +13,8 @@ export default function AuthProvider({ children }) {
 
   const [username, setUsername] = useState(null);
 
+  const [token, setToken] = useState(null);
+
   // function login(username, password) {
   //   if (username === "username" && password === "pwd") {
   //     setIsAuthenticated(true);
@@ -25,36 +27,37 @@ export default function AuthProvider({ children }) {
   //   }
   // }
 
-  function login(username, password) {
+  async function login(username, password) {
     const baToken = `Basic ` + window.btoa(username + ":" + password);
 
-    executeBasicAuthenticationService(baToken)
-      .then((response) => {
-        console.log(response);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    try {
+      const response = await executeBasicAuthenticationService(baToken);
 
-    setIsAuthenticated(false);
-
-    // if (username === "username" && password === "pwd") {
-    //   setIsAuthenticated(true);
-    //   setUsername(username);
-    //   return true;
-    // } else {
-    //   setIsAuthenticated(false);
-    //   setUsername(null);
-    //   return false;
-    // }
+      if (response.status === 200) {
+        setIsAuthenticated(true);
+        setUsername(username);
+        setToken(baToken);
+        return true;
+      } else {
+        logout();
+        return false;
+      }
+    } catch (error) {
+      logout();
+      return false;
+    }
   }
 
   function logout() {
     setIsAuthenticated(false);
+    setToken(null);
+    setUsername(null);
   }
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, login, logout, username }}>
+    <AuthContext.Provider
+      value={{ isAuthenticated, login, logout, username, token }}
+    >
       {children}
     </AuthContext.Provider>
   );

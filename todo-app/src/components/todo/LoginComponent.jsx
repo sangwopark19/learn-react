@@ -12,13 +12,13 @@ export default function LoginComponent() {
   function handleUsernameChange(event) {
     setUsername(event.target.value);
   }
-  
+
   function handlePasswordChange(event) {
     setPassword(event.target.value);
   }
 
-  function handleSubmit() {
-    if (authContext.login(username, password)) {
+  async function handleSubmit() {
+    if (await authContext.login(username, password)) {
       navigate(`/welcome/${username}`);
     } else {
       setShowErrorMessage(true);
