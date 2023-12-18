@@ -16,3 +16,10 @@ export const retrieveHelloWorldPathVariable = (username) =>
       Authorization: "Basic dXNlcm5hbWU6cHdk",
     },
   });
+
+export const executeBasicAuthenticationService = (token) =>
+  apiClient.get(`/basicauth`, {
+    headers: {
+      Authorization: token,
+    },
+  });
